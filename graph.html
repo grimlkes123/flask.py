@@ -1,0 +1,407 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermart Grocery Orders Dataset</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold">Supermart Grocery Orders Dataset</h1>
+            <div class="flex space-x-4">
+                <a href="{{ url_for('home') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Home
+                </a>
+                <a href="{{ url_for('forecast') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Dataset
+                </a>
+                <a href="{{ url_for('forecast_prediction') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Proceed to Forecast Prediction
+                </a>
+            </div>
+        </div>
+        
+        <div class="bg-gray-800 shadow-md rounded-lg p-4 mb-4">
+            <h2 class="text-xl font-semibold mb-2">Order Summary</h2>
+            <table class="min-w-full bg-gray-800 text-white text-sm">
+                <thead>
+                    <tr>
+                        <th class="py-1">Order ID</th>
+                        <th class="py-1">Customer Name</th>
+                        <th class="py-1">Category</th>
+                        <th class="py-1">Sub Category</th>
+                        <th class="py-1">City</th>
+                        <th class="py-1">Order Date</th>
+                        <th class="py-1">Region</th>
+                        <th class="py-1">Sales</th>
+                        <th class="py-1">Discount</th>
+                        <th class="py-1">Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-1">9994</td>
+                        <td class="py-1">Amrish</td>
+                        <td class="py-1">Snacks</td>
+                        <td class="py-1">Health Drinks</td>
+                        <td class="py-1">Kanyakumari</td>
+                        <td class="py-1">01/03/2015</td>
+                        <td class="py-1">West</td>
+                        <td class="py-1">$1500.00</td>
+                        <td class="py-1">0.12</td>
+                        <td class="py-1">$25.25</td>
+                    </tr>
+                    <tr>
+                        <td class="py-1">9995</td>
+                        <td class="py-1">Krithika</td>
+                        <td class="py-1">Eggs, Meat & Fish</td>
+                        <td class="py-1">Soft Drinks</td>
+                        <td class="py-1">Chennai</td>
+                        <td class="py-1">02/03/2015</td>
+                        <td class="py-1">East</td>
+                        <td class="py-1">$1200.00</td>
+                        <td class="py-1">0.10</td>
+                        <td class="py-1">$30.00</td>
+                    </tr>
+                    <tr>
+                        <td class="py-1">9996</td>
+                        <td class="py-1">John Doe</td>
+                        <td class="py-1">Snacks</td>
+                        <td class="py-1">Health Drinks</td>
+                        <td class="py-1">Mumbai</td>
+                        <td class="py-1">03/03/2015</td>
+                        <td class="py-1">West</td>
+                        <td class="py-1">$1800.00</td>
+                        <td class="py-1">0.15</td>
+                        <td class="py-1">$40.00</td>
+                    </tr>
+                    <tr>
+                        <td class="py-1">9997</td>
+                        <td class="py-1">Jane Smith</td>
+                        <td class="py-1">Eggs, Meat & Fish</td>
+                        <td class="py-1">Soft Drinks</td>
+                        <td class="py-1">Delhi</td>
+                        <td class="py-1">04/03/2015</td>
+                        <td class="py-1">North</td>
+                        <td class="py-1">$1600.00</td>
+                        <td class="py-1">0.20</td>
+                        <td class="py-1">$50.00</td>
+                    </tr>
+                    <tr>
+                        <td class="py-1">9998</td>
+                        <td class="py-1">Alice Johnson</td>
+                        <td class="py-1">Snacks</td>
+                        <td class="py-1">Health Drinks</td>
+                        <td class="py-1">Bangalore</td>
+                        <td class="py-1">05/03/2015</td>
+                        <td class="py-1">South</td>
+                        <td class="py-1">$1400.00</td>
+                        <td class="py-1">0.18</td>
+                        <td class="py-1">$35.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-gray-800 shadow-md rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-2">Customer Distribution</h2>
+                <div class="h-64">
+                    <canvas id="customerDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 shadow-md rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-2">Category Distribution</h2>
+                <div class="h-64">
+                    <canvas id="categoryDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 shadow-md rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-2">Order Date Distribution</h2>
+                <div class="h-64">
+                    <canvas id="orderDateDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 shadow-md rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-2">Region Distribution</h2>
+                <div class="h-64">
+                    <canvas id="regionDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 shadow-md rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-2">Sales Distribution</h2>
+                <div class="h-64">
+                    <canvas id="salesDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 shadow-md rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-2">Discount Distribution</h2>
+                <div class="h-64">
+                    <canvas id="discountDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 shadow-md rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-2">Profit Distribution</h2>
+                <div class="h-64">
+                    <canvas id="profitDistributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const customerDistributionData = {
+            labels: ['Amrish', 'Krithika', 'Other'],
+            datasets: [{
+                label: 'Customer Distribution',
+                data: [2, 2, 95],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+            }]
+        };
+
+        const categoryDistributionData = {
+            labels: ['Snacks', 'Eggs, Meat & Fish', 'Other', 'Health Drinks', 'Soft Drinks'],
+            datasets: [{
+                label: 'Category Distribution',
+                data: [15, 15, 70, 7, 7],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+            }]
+        };
+
+        const orderDateDistributionData = {
+            labels: ['01/03/2015 - 05/28/2015', '05/28/2015 - 10/21/2015', '10/21/2015 - 03/15/2016', '03/15/2016 - 08/07/2016', '08/07/2016 - 12/31/2016', '12/31/2016 - 05/26/2017', '05/26/2017 - 10/18/2017', '10/18/2017 - 03/13/2018', '03/13/2018 - 08/06/2018', '08/06/2018 - 12/30/2018'],
+            datasets: [{
+                label: 'Order Date Distribution',
+                data: [529, 828, 814, 692, 1232, 677, 1099, 1165, 1090, 1868],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FFCD56', '#4BC0C0', '#36A2EB', '#FF6384'],
+            }]
+        };
+
+        const regionDistributionData = {
+            labels: ['West', 'East', 'Other'],
+            datasets: [{
+                label: 'Region Distribution',
+                data: [32, 28, 39],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+            }]
+        };
+
+        const salesDistributionData = {
+            labels: ['500.00 - 700.00', '700.00 - 900.00', '900.00 - 1100.00', '1100.00 - 1300.00', '1300.00 - 1500.00', '1500.00 - 1700.00', '1700.00 - 1900.00', '1900.00 - 2100.00', '2100.00 - 2300.00', '2300.00 - 2500.00'],
+            datasets: [{
+                label: 'Sales Distribution',
+                data: [1027, 997, 975, 985, 1018, 1042, 985, 984, 968, 1013],
+                backgroundColor: '#FF6384',
+            }]
+        };
+
+        const discountDistributionData = {
+            labels: ['0.10 - 0.12', '0.12 - 0.15', '0.15 - 0.17', '0.17 - 0.20', '0.20 - 0.22', '0.22 - 0.25', '0.25 - 0.28', '0.28 - 0.30', '0.30 - 0.32', '0.32 - 0.35'],
+            datasets: [{
+                label: 'Discount Distribution',
+                data: [1113, 1094, 722, 807, 1141, 779, 1264, 740, 1123, 1211],
+                backgroundColor: '#36A2EB',
+            }]
+        };
+
+        const profitDistributionData = {
+            labels: ['25.25 - 134.82', '134.82 - 244.39', '244.39 - 353.96', '353.96 - 463.53', '463.53 - 573.10', '573.10 - 682.67', '682.67 - 792.24', '792.24 - 901.81', '901.81 - 1011.38', '1011.38 - 1120.95'],
+            datasets: [{
+                label: 'Profit Distribution',
+                data: [1552, 2166, 1755, 1345, 1077, 800, 564, 412, 231, 92],
+                backgroundColor: '#FFCE56',
+            }]
+        };
+
+        window.onload = function() {
+            const ctx1 = document.getElementById('customerDistributionChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'pie',
+                data: customerDistributionData,
+                options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const ctx2 = document.getElementById('categoryDistributionChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'pie',
+                data: categoryDistributionData,
+                options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const ctx3 = document.getElementById('orderDateDistributionChart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'bar',
+                data: orderDateDistributionData,
+                options: {
+                    scales: {
+                        x: {
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 45,
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const ctx4 = document.getElementById('regionDistributionChart').getContext('2d');
+            new Chart(ctx4, {
+                type: 'pie',
+                data: regionDistributionData,
+                options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const ctx5 = document.getElementById('salesDistributionChart').getContext('2d');
+            new Chart(ctx5, {
+                type: 'bar',
+                data: salesDistributionData,
+                options: {
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const ctx6 = document.getElementById('discountDistributionChart').getContext('2d');
+            new Chart(ctx6, {
+                type: 'bar',
+                data: discountDistributionData,
+                options: {
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+
+            const ctx7 = document.getElementById('profitDistributionChart').getContext('2d');
+            new Chart(ctx7, {
+                type: 'bar',
+                data: profitDistributionData,
+                options: {
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>

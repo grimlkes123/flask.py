@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Feedback Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .glassmorphism {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-black transition-colors duration-300">
+    <header class="bg-gray-800 shadow-md py-4">
+        <div class="container mx-auto flex justify-between items-center px-6">
+            <div class="text-2xl font-bold text-white">User Feedback Dashboard</div>
+            <nav class="space-x-4">
+                <a class="text-gray-300 hover:text-blue-500" href="{{ url_for('home') }}">Home</a>
+                <a class="text-gray-300 hover:text-blue-500" href="{{ url_for('dashboard') }}">System Dashboard</a>
+            </nav>
+            <button class="text-gray-300 hover:text-blue-500" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <div class="min-h-screen flex flex-col">
+        <!-- Main Content -->
+        <main class="flex-grow p-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Feedback Card -->
+                {% for feedback in feedback_data %}
+                <div class="glassmorphism p-4 shadow-lg text-white">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-semibold">Feedback #{{ loop.index }}</h2>
+                        <button class="text-red-500 hover:text-red-700" onclick="deleteFeedback('{{ feedback.id }}')">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </div>
+                    <p class="mt-2"><strong>Name:</strong> {{ feedback.name }}</p>
+                    <p class="mt-2"><strong>Email:</strong> {{ feedback.email }}</p>
+                    <p class="mt-2"><strong>Feedback:</strong> {{ feedback.feedback }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // On page load, set the theme based on local storage
+        if (localStorage.getItem('theme') === 'dark') {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        function deleteFeedback(feedbackId) {
+            fetch(`/delete-feedback/${feedbackId}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

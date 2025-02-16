@@ -1,0 +1,93 @@
+<html>
+ <head>
+  <title>
+   Feedback Form
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #1a202c; /* Dark background */
+            color: #ffffff; /* White text */
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+  </style>
+ </head>
+ <body class="bg-gray-900 flex items-center justify-center min-h-screen relative">
+  <img alt="A blurred background image of a modern office space with desks and computers" class="absolute inset-0 w-full h-full object-cover opacity-30" height="1080" src="https://storage.googleapis.com/a1aa/image/9IAVvNpYtfL9bBxqV5K5M6HSl0kb3V2qNJkBi6kAv9Y.jpg" width="1920"/>
+  <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md relative z-10">
+   <h2 class="text-2xl font-bold mb-6 text-center text-white">
+    Feedback Form
+   </h2>
+   <form class="space-y-4" id="feedbackForm">
+    <div>
+     <label class="block text-sm font-medium text-gray-300" for="name">
+      Name
+     </label>
+     <input class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white" id="name" name="name" required="" type="text"/>
+    </div>
+    <div>
+     <label class="block text-sm font-medium text-gray-300" for="email">
+      Email
+     </label>
+     <input class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white" id="email" name="email" required="" type="email"/>
+    </div>
+    <div>
+     <label class="block text-sm font-medium text-gray-300" for="feedback">
+      Feedback
+     </label>
+     <textarea class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-700 text-white" id="feedback" name="feedback" required="" rows="4"></textarea>
+    </div>
+    <div class="flex justify-center">
+     <button class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">
+      Submit Feedback
+     </button>
+    </div>
+   </form>
+   <div class="hidden flex justify-center items-center mt-4" id="loading">
+    <i class="fas fa-spinner fa-spin text-indigo-600 text-3xl">
+    </i>
+   </div>
+   <div class="hidden text-center mt-4 fade-in" id="confirmation">
+    <p class="text-lg font-medium text-green-500">
+     Thank you for your feedback!
+    </p>
+   </div>
+  </div>
+  <script>
+   document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('feedbackForm').classList.add('hidden');
+
+            const formData = new FormData(this);
+            fetch('{{ url_for("submit_feedback") }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('confirmation').classList.remove('hidden');
+                setTimeout(() => {
+                    window.location.href = "{{ url_for('home') }}";
+                }, 2000); // Redirect to home after 2 seconds
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('feedbackForm').classList.remove('hidden');
+            });
+        });
+  </script>
+ </body>
+</html>

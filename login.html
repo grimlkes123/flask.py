@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Supermart Sales Forecasting System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 700;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
+        .button-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .button-primary:hover {
+            background-color: #2563eb;
+            transform: scale(1.05);
+        }
+        .button-secondary {
+            background-color: #1f2937;
+            color: white;
+        }
+        .button-secondary:hover {
+            background-color: #111827;
+            transform: scale(1.05);
+        }
+        .button-link {
+            color: #3b82f6;
+            text-decoration: underline;
+        }
+        .button-link:hover {
+            color: #2563eb;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Login Page -->
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-800 to-gray-900">
+        <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h2 class="text-2xl font-bold mb-6 text-center text-white">Supermart Sales Forecasting</h2>
+            <form action="{{ url_for('login') }}" method="post">
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-sm font-bold mb-2" for="username">Username</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" name="username" type="text" placeholder="Username" required maxlength="20"/>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-400 text-sm font-bold mb-2" for="password">Password</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="Password" required minlength="8" maxlength="20"/>
+                </div>
+                {% if error %}
+                <div class="mb-4 text-red-500 text-sm">
+                    {{ error }}
+                </div>
+                {% endif %}
+                <div class="flex items-center justify-between">
+                    <button class="button button-primary" type="submit">Login</button>
+                    <a class="button button-link" href="{{ url_for('register') }}">Register</a>
+                    <a class="button button-link" href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

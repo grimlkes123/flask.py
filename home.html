@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"="width=device-width, initial-scale=1.0"/>
+    <title>Modern Home Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .hero-text {
+            animation: textAnimation 10s infinite;
+        }
+        @keyframes textAnimation {
+            0%, 100% { opacity: 0; transform: translateY(-20px); }
+            10%, 90% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900 overflow-hidden">
+    <!-- Navigation Bar -->
+    <nav class="bg-transparent fixed w-full z-10">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="{{ url_for('home') }}">
+                    <img src="{{ url_for('photo', filename='school logo.png') }}" alt="Placeholder for the left logo of the school" class="h-40 w-40"/>
+                </a>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="{{ url_for('dashboard') }}" class="text-gray-800 hover:text-gray-600">Dashboard</a>
+                <a href="{{ url_for('user_feedback') }}" class="text-gray-800 hover:text-gray-600">User Feedback</a>
+                <a href="{{ url_for('dataset_result') }}" class="text-gray-800 hover:text-gray-600">Categories</a>
+                <a href="{{ url_for('dataset_preview') }}" class="text-gray-800 hover:text-gray-600">Dataset Preview</a>
+            </div>
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('photo', filename='123.png') }}" alt="Placeholder for the right logo of the school" class="h-40 w-40"/>
+            </a>
+            <div class="md:hidden">
+                <button class="text-gray-800 focus:outline-none bg-transparent">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
+        <img src="https://storage.googleapis.com/a1aa/image/vscBi48bblPRxxHGidhp_Ni-Pw-nlUlFpZLbKIjlVp0.jpg" alt="High-quality background image of a stunning mountain landscape with a clear blue sky" class="absolute inset-0 w-full h-full object-cover opacity-50"/>
+        <div class="relative z-10 text-center text-white">
+            <h1 class="text-5xl md:text-7xl font-bold hero-text">Improving Sales Forecasting for Grocery Stores <br>A Study on Supermart's Sales Data</h1>
+            <p class="mt-4 text-lg md:text-2xl"><br>UNIVERSITY OF NEGROS OCCIDENTAL - COLLEGE OF INFORMATION TECHNOLOGY</p>
+        </div>
+    </section>
+</body>
+</html>

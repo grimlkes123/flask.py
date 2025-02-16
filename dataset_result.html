@@ -1,0 +1,425 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic Forecasting Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            overflow: hidden;
+        }
+        .neon-glow {
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.5), 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25%, 75% {
+                transform: translateX(-5px);
+            }
+            50% {
+                transform: translateX(5px);
+            }
+        }
+        .zebra-stripe:nth-child(odd) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const dates = [];
+            for (let i = 1; i <= 10; i++) {
+                const date = urlParams.get(`date${i}`);
+                if (date) {
+                    dates.push(date);
+                }
+            }
+
+            const forecastValues = {};
+            const tableBodies = document.querySelectorAll('table tbody');
+            tableBodies.forEach((tbody, tableIndex) => {
+                tbody.innerHTML = '';
+                dates.forEach((date, index) => {
+                    if (!forecastValues[date]) {
+                        forecastValues[date] = {};
+                    }
+                    if (!forecastValues[date][tableIndex]) {
+                        if (tableIndex === 9) { // Regions table
+                            forecastValues[date][tableIndex] = (Math.random() * 100).toFixed(2);
+                        } else if (tableIndex === 8) { // Sales table
+                            forecastValues[date][tableIndex] = Math.floor(Math.random() * 2000);
+                        } else {
+                            forecastValues[date][tableIndex] = (Math.random() * 1000).toFixed(2);
+                        }
+                    }
+                    const row = document.createElement('tr');
+                    row.classList.add('zebra-stripe');
+                    row.innerHTML = `<td class="py-2 px-4 border-b border-gray-600">${date}</td><td class="py-2 px-4 border-b border-gray-600">${forecastValues[date][tableIndex]}${tableIndex === 9 ? '%' : ''}</td>`;
+                    tbody.appendChild(row);
+                });
+            });
+
+            const chartConfigs = [
+                { id: 'forecastChart1', label: 'Bakery', borderColor: '#FF6384', backgroundColor: 'rgba(255, 99, 132, 0.2)', tableIndex: 0 },
+                { id: 'forecastChart2', label: 'Beverages', borderColor: '#36A2EB', backgroundColor: 'rgba(54, 162, 235, 0.2)', tableIndex: 1 },
+                { id: 'forecastChart3', label: 'Eggs, Meat & Fish', borderColor: '#FFCE56', backgroundColor: 'rgba(255, 206, 86, 0.2)', tableIndex: 2 },
+                { id: 'forecastChart4', label: 'Food Grains', borderColor: '#4BC0C0', backgroundColor: 'rgba(75, 192, 192, 0.2)', tableIndex: 3 },
+                { id: 'forecastChart5', label: 'Fruits & Veggies', borderColor: '#9966FF', backgroundColor: 'rgba(153, 102, 255, 0.2)', tableIndex: 4 },
+                { id: 'forecastChart6', label: 'Oil & Masala', borderColor: '#FF6384', backgroundColor: 'rgba(255, 99, 132, 0.2)', tableIndex: 5 },
+                { id: 'forecastChart7', label: 'Snacks', borderColor: '#36A2EB', backgroundColor: 'rgba(54, 162, 235, 0.2)', tableIndex: 6 },
+                { id: 'forecastChart8', label: 'Profits', borderColor: '#FF9F40', backgroundColor: 'rgba(255, 159, 64, 0.2)', tableIndex: 7 },
+                { id: 'forecastChart9', label: 'Sales', borderColor: '#FF6384', backgroundColor: 'rgba(255, 99, 132, 0.2)', tableIndex: 8 },
+                { id: 'forecastChart10', label: 'Regions', borderColor: '#4BC0C0', backgroundColor: 'rgba(75, 192, 192, 0.2)', tableIndex: 9 },
+                { id: 'forecastChart11', label: 'Discounts', borderColor: '#9966FF', backgroundColor: 'rgba(153, 102, 255, 0.2)', tableIndex: 10 }
+            ];
+
+            chartConfigs.forEach(config => {
+                const ctx = document.getElementById(config.id).getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: config.label,
+                            data: dates.map(date => forecastValues[date][config.tableIndex]),
+                            borderColor: config.borderColor,
+                            backgroundColor: config.backgroundColor,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: 'white'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.2)'
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: 'white',
+                                    callback: function(value) {
+                                        return config.tableIndex === 9 ? value + '%' : value;
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.2)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'white'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw}${config.tableIndex === 9 ? '%' : ''}`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        };
+    </script>
+</head>
+<body class="text-white min-h-screen flex flex-col justify-center items-center overflow-y-auto">
+    <div class="container mx-auto p-4 bg-gray-800 rounded-lg shadow-lg glassmorphism max-w-4xl">
+        <div class="flex justify-between mb-4">
+            <a href="{{ url_for('home') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Home
+            </a>
+        </div>
+        <h1 class="text-3xl font-bold text-center mb-4">Supermart Grocery Orders Dataset</h1>
+        <div id="forecast-results" class="mt-4 p-4 bg-gray-700 rounded-lg shadow-inner glassmorphism">
+            <h2 class="text-lg font-semibold mb-2">Selected Dates</h2>
+            <ul>
+                {% for date in dates %}
+                    <li>{{ date }}</li>
+                {% endfor %}
+            </ul>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="h-48">
+                    <canvas id="forecastChart1"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart2"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart3"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart4"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart5"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart6"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart7"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart8"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart9"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart10"></canvas>
+                </div>
+                <div class="h-48">
+                    <canvas id="forecastChart11"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 p-4 bg-gray-700 rounded-lg shadow-inner glassmorphism">
+            <div class="overflow-x-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Bakery</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 1</td><td class="py-2 px-4 border-b border-gray-600">$1</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 2</td><td class="py-2 px-4 border-b border-gray-600">$2</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 3</td><td class="py-2 px-4 border-b border-gray-600">$3</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 4</td><td class="py-2 px-4 border-b border-gray-600">$4</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 5</td><td class="py-2 px-4 border-b border-gray-600">$5</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 6</td><td class="py-2 px-4 border-b border-gray-600">$6</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 7</td><td class="py-2 px-4 border-b border-gray-600">$7</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 8</td><td class="py-2 px-4 border-b border-gray-600">$8</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 9</td><td class="py-2 px-4 border-b border-gray-600">$9</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 10</td><td class="py-2 px-4 border-b border-gray-600">$10</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Beverages</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 1</td><td class="py-2 px-4 border-b border-gray-600">$1</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 2</td><td class="py-2 px-4 border-b border-gray-600">$2</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 3</td><td class="py-2 px-4 border-b border-gray-600">$3</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 4</td><td class="py-2 px-4 border-b border-gray-600">$4</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 5</td><td class="py-2 px-4 border-b border-gray-600">$5</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 6</td><td class="py-2 px-4 border-b border-gray-600">$6</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 7</td><td class="py-2 px-4 border-b border-gray-600">$7</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 8</td><td class="py-2 px-4 border-b border-gray-600">$8</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 9</td><td class="py-2 px-4 border-b border-gray-600">$9</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 10</td><td class="py-2 px-4 border-b border-gray-600">$10</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Eggs, Meat & Fish</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 1</td><td class="py-2 px-4 border-b border-gray-600">$1</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 2</td><td class="py-2 px-4 border-b border-gray-600">$2</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 3</td><td class="py-2 px-4 border-b border-gray-600">$3</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 4</td><td class="py-2 px-4 border-b border-gray-600">$4</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 5</td><td class="py-2 px-4 border-b border-gray-600">$5</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 6</td><td class="py-2 px-4 border-b border-gray-600">$6</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 7</td><td class="py-2 px-4 border-b border-gray-600">$7</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 8</td><td class="py-2 px-4 border-b border-gray-600">$8</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 9</td><td class="py-2 px-4 border-b border-gray-600">$9</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 10</td><td class="py-2 px-4 border-b border-gray-600">$10</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Food Grains</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 1</td><td class="py-2 px-4 border-b border-gray-600">$1</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 2</td><td class="py-2 px-4 border-b border-gray-600">$2</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 3</td><td class="py-2 px-4 border-b border-gray-600">$3</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 4</td><td class="py-2 px-4 border-b border-gray-600">$4</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 5</td><td class="py-2 px-4 border-b border-gray-600">$5</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 6</td><td class="py-2 px-4 border-b border-gray-600">$6</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 7</td><td class="py-2 px-4 border-b border-gray-600">$7</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 8</td><td class="py-2 px-4 border-b border-gray-600">$8</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 9</td><td class="py-2 px-4 border-b border-gray-600">$9</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 10</td><td class="py-2 px-4 border-b border-gray-600">$10</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Fruits & Veggies</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 1</td><td class="py-2 px-4 border-b border-gray-600">$1</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 2</td><td class="py-2 px-4 border-b border-gray-600">$2</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 3</td><td class="py-2 px-4 border-b border-gray-600">$3</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 4</td><td class="py-2 px-4 border-b border-gray-600">$4</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 5</td><td class="py-2 px-4 border-b border-gray-600">$5</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 6</td><td class="py-2 px-4 border-b border-gray-600">$6</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 7</td><td class="py-2 px-4 border-b border-gray-600">$7</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 8</td><td class="py-2 px-4 border-b border-gray-600">$8</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 9</td><td class="py-2 px-4 border-b border-gray-600">$9</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 10</td><td class="py-2 px-4 border-b border-gray-600">$10</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Oil & Masala</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 1</td><td class="py-2 px-4 border-b border-gray-600">$1</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 2</td><td class="py-2 px-4 border-b border-gray-600">$2</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 3</td><td class="py-2 px-4 border-b border-gray-600">$3</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 4</td><td class="py-2 px-4 border-b border-gray-600">$4</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 5</td><td class="py-2 px-4 border-b border-gray-600">$5</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 6</td><td class="py-2 px-4 border-b border-gray-600">$6</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 7</td><td class="py-2 px-4 border-b border-gray-600">$7</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 8</td><td class="py-2 px-4 border-b border-gray-600">$8</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 9</td><td class="py-2 px-4 border-b border-gray-600">$9</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 10</td><td class="py-2 px-4 border-b border-gray-600">$10</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Snacks</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 1</td><td class="py-2 px-4 border-b border-gray-600">$1</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 2</td><td class="py-2 px-4 border-b border-gray-600">$2</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 3</td><td class="py-2 px-4 border-b border-gray-600">$3</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 4</td><td class="py-2 px-4 border-b border-gray-600">$4</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 5</td><td class="py-2 px-4 border-b border-gray-600">$5</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 6</td><td class="py-2 px-4 border-b border-gray-600">$6</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 7</td><td class="py-2 px-4 border-b border-gray-600">$7</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 8</td><td class="py-2 px-4 border-b border-gray-600">$8</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 9</td><td class="py-2 px-4 border-b border-gray-600">$9</td></tr>
+                                <tr class="zebra-stripe"><td class="py-2 px-4 border-b border-gray-600">Date 10</td><td class="py-2 px-4 border-b border-gray-600">$10</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Profits</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rows will be dynamically generated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Sales</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rows will be dynamically generated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Regions</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rows will be dynamically generated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-2">
+                        <table class="min-w-full bg-gray-800 text-white mb-4">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-600">Discounts</th>
+                                    <th class="py-2 px-4 border-b border-gray-600">Forecasted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rows will be dynamically generated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
